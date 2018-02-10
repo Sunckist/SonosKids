@@ -1,0 +1,8 @@
+include ':app'
+
+include ':sonoscontroller'
+project (':sonoscontroller').projectDir = new File(settingsDir, '../sonos-controller')
+
+include ':ssdp-client'
+project(':ssdp-client').projectDir = new File(settingsDir, '../sonos-controller/lib/ssdp-client')
+
