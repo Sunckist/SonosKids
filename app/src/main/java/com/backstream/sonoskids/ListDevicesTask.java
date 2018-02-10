@@ -9,10 +9,6 @@ import com.vmichalak.sonoscontroller.exception.SonosControllerException;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created by magnus on 2/9/18.
- */
-
 public class ListDevicesTask extends AsyncTask<String, Void, List<SonosDevice>> {
 
     protected List<SonosDevice> doInBackground(String... urls) {
