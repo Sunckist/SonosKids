@@ -4,4 +4,6 @@ import com.vmichalak.sonoscontroller.SonosDevice;
 
 interface SonosCallback {
     void setDevice(SonosDevice sonosDevice);
+
+    void setAlbumArt(String albumArtUri);
 }

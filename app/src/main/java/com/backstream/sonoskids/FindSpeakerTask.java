@@ -9,20 +9,31 @@ import com.vmichalak.sonoscontroller.exception.SonosControllerException;
 import java.io.IOException;
 import java.util.List;
 
-public class FindSpeakerTask extends AsyncTask<SonosCallback, Void, SonosDevice> {
+public class FindSpeakerTask extends AsyncTask<Void, Void, SonosDevice> {
     private SonosCallback callback;
 
-    protected SonosDevice doInBackground(SonosCallback... callbacks) {
-        if (callbacks != null) {
-            callback = callbacks[0];
-        }
+    public FindSpeakerTask(SonosCallback callback) {
+        super();
+        this.callback = callback;
+    }
+
+    protected SonosDevice doInBackground(Void... params) {
         try {
             SonosDevice speaker = null;
             List<SonosDevice> sonosDevices = SonosDiscovery.discover();
             for (SonosDevice sonosDevice : sonosDevices) {
                 try {
                     if ("Living Room".equals(sonosDevice.getZoneName())) {
-                        speaker = sonosDevice;
+                        callback.setDevice(sonosDevice);
+                        if (sonosDevice.getCurrentTrackInfo() != null) {
+                            callback.setAlbumArt(
+                                    Constants.PROTOCOL_PREFIX +
+                                            sonosDevice.getSpeakerInfo().getIpAddress() +
+                                            Constants.PORT_SUFFIX +
+                                            sonosDevice.getCurrentTrackInfo().getMetadata().getAlbumArtURI()
+
+                            );
+                        }
                     }
                     System.out.println(sonosDevice.getSpeakerInfo());
                 } catch (SonosControllerException e) {
@@ -35,10 +46,5 @@ public class FindSpeakerTask extends AsyncTask<SonosCallback, Void, SonosDevice>
             e.printStackTrace();
         }
         return null;
-    }
-
-    @Override
-    protected void onPostExecute(SonosDevice sonosDevice) {
-       callback.setDevice(sonosDevice);
     }
 }
